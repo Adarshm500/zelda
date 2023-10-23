@@ -159,6 +159,27 @@ function Room:update(dt)
         -- remove entity from the table if health is <= 0
         if entity.health <= 0 then
             entity.dead = true
+            -- chance to generate a heart
+            if math.random(4) == 1 and entity.prevHealth > 0 then
+                local heart = GameObject(GAME_OBJECT_DEFS['heart'],entity.x, entity.y)
+
+                -- onCollide the heart should disappear and the health should increase
+                heart.onCollide = function(obj)
+                    for i = 1, #self.objects do
+                        if self.objects[i] == obj then
+                            table.remove(self.objects, i)
+                        end
+                    end
+                    
+                    -- ensure that the health should increase and to the extent that it isn't beyond the 3 hearts
+                    if self.player.health < 5 then
+                        self.player:damage(-2)
+                    elseif self.player.health == 5 then
+                        self.player:damage(-1)
+                    end
+                end
+                table.insert(self.objects, heart)
+            end
         elseif not entity.dead then
             entity:processAI({room = self}, dt)
             entity:update(dt)
@@ -174,6 +195,7 @@ function Room:update(dt)
                 gStateMachine:change('game-over')
             end
         end
+        entity.prevHealth = entity.health
     end
 
     for k, object in pairs(self.objects) do
