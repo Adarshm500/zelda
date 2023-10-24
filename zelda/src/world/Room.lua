@@ -104,6 +104,20 @@ function Room:generateObjects()
 
     -- add to list of objects in scene (only one switch for now)
     table.insert(self.objects, switch)
+
+    -- add a pot to the game 
+    local pot = GameObject(
+        GAME_OBJECT_DEFS['pot'],
+        math.random(MAP_RENDER_OFFSET_X + TILE_SIZE,
+                    VIRTUAL_WIDTH - TILE_SIZE * 2 - 16),
+        math.random(MAP_RENDER_OFFSET_Y + TILE_SIZE,
+                    VIRTUAL_HEIGHT - (VIRTUAL_HEIGHT - MAP_HEIGHT * TILE_SIZE) + MAP_RENDER_OFFSET_Y - TILE_SIZE - 16)
+    )
+
+    pot.onCollide = function()
+    end
+
+    table.insert(self.objects, pot)
 end
 
 --[[
@@ -204,6 +218,17 @@ function Room:update(dt)
         -- trigger collision callback on object
         if self.player:collides(object) then
             object:onCollide()
+            if object.solid then
+                if self.player.direction == 'left' then
+                    self.player.x = self.player.x + PLAYER_WALK_SPEED * dt
+                elseif self.player.direction == 'right' then
+                    self.player.x = self.player.x - PLAYER_WALK_SPEED * dt
+                elseif self.player.direction == 'up' then
+                    self.player.y = self.player.y + PLAYER_WALK_SPEED * dt
+                else
+                    self.player.y = self.player.y - PLAYER_WALK_SPEED * dt
+                end
+            end
         end
     end
 end
