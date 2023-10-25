@@ -9,6 +9,7 @@
 PlayerIdleState = Class{__includes = EntityIdleState}
 
 function PlayerIdleState:enter(params)
+    print('idle')
     
     -- render offset for spaced character sprite (negated in render function of state)
     self.entity.offsetY = 5
@@ -16,6 +17,7 @@ function PlayerIdleState:enter(params)
 end
 
 function PlayerIdleState:update(dt)
+    print('idling')
     if love.keyboard.isDown('left') or love.keyboard.isDown('right') or
        love.keyboard.isDown('up') or love.keyboard.isDown('down') then
         self.entity:changeState('walk')
@@ -23,5 +25,9 @@ function PlayerIdleState:update(dt)
 
     if love.keyboard.wasPressed('space') then
         self.entity:changeState('swing-sword')
+    end
+
+    if love.keyboard.wasPressed('return') then
+        self.entity:changeState('pot-lift')
     end
 end

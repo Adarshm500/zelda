@@ -9,8 +9,10 @@
 PlayerWalkState = Class{__includes = EntityWalkState}
 
 function PlayerWalkState:init(player, dungeon)
+    print('walk')
     self.entity = player
     self.dungeon = dungeon
+    self.canSwingSword = true
 
     -- render offset for spaced character sprite; negated in render function of state
     self.entity.offsetY = 5
@@ -18,6 +20,7 @@ function PlayerWalkState:init(player, dungeon)
 end
 
 function PlayerWalkState:update(dt)
+    print('walking')
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'
         self.entity:changeAnimation('walk-left')
@@ -34,8 +37,12 @@ function PlayerWalkState:update(dt)
         self.entity:changeState('idle')
     end
 
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('space') and self.canSwingSword then
         self.entity:changeState('swing-sword')
+    end
+
+    if love.keyboard.wasPressed('return') then
+        self.entity:changeState('pot-lift')
     end
 
     -- perform base collision detection against walls
