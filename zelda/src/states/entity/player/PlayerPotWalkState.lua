@@ -14,6 +14,18 @@ function PlayerPotWalkState:update(dt)
     -- perform base collision detection against walls
     self.canSwingSword = false
     PlayerWalkState.update(self, dt)
+    for k, object in pairs(self.dungeon.currentRoom.objects) do
+        if object.type == 'pot' then
+            object.y = self.entity.y - self.entity.height / 2
+            object.x = self.entity.x
+
+            if self.entity.direction == 'left' or self.entity.direction == 'right' then
+                object.state = 'side'
+            else
+                object.state = 'top' 
+            end
+        end
+    end
 
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'

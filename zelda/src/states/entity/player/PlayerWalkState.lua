@@ -41,12 +41,14 @@ function PlayerWalkState:update(dt)
         self.entity:changeState('swing-sword')
     end
 
-    if love.keyboard.wasPressed('return') then
-        self.entity:changeState('pot-lift')
-    end
-
     -- perform base collision detection against walls
     EntityWalkState.update(self, dt)
+    -- if collision with pot then player can lift it
+    if self.entity.potCollision then 
+        if love.keyboard.wasPressed('return') then
+            self.entity:changeState('pot-lift')
+        end
+    end
 
     -- if we bumped something when checking collision, check any object collisions
     if self.bumped then

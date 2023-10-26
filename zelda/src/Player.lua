@@ -10,6 +10,11 @@ Player = Class{__includes = Entity}
 
 function Player:init(def)
     Entity.init(self, def)
+    -- flag for the player to check if he is colliding with some object
+    self.potCollision = false
+
+    -- flag to check if the player is lfiting the pot
+    self.liftingPot = false
 end
 
 function Player:update(dt)

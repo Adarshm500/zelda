@@ -31,11 +31,14 @@ GAME_OBJECT_DEFS = {
         width = 16,
         height = 16,
         solid = true,
-        defaultState = 'newPot',
+        defaultState = 'top',
         states = {
-            ['newPot'] = {
-                frame = 14
-            }
+            ['side'] = {
+                frame = 15
+            },
+            ['top'] = {
+                frame = 16
+            },
         }
     },
     ['heart'] = {

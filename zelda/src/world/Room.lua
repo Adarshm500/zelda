@@ -162,6 +162,13 @@ end
 
 function Room:update(dt)
     
+    -- if love.keyboard.isDown('a') then
+    --     for k, object in pairs(self.objects) do
+    --         if object.type == 'pot' then
+    --             object.x = object.x - self.player.walkSpeed * dt
+    --         end
+    --     end
+    -- end 
     -- don't update anything if we are sliding to another room (we have offsets)
     if self.adjacentOffsetX ~= 0 or self.adjacentOffsetY ~= 0 then return end
 
@@ -212,13 +219,18 @@ function Room:update(dt)
         entity.prevHealth = entity.health
     end
 
+    self.player.potCollision = false
     for k, object in pairs(self.objects) do
         object:update(dt)
+
+        if self.player:collides(object) and object.type == 'pot' then
+            self.player.potCollision = true
+        end
 
         -- trigger collision callback on object
         if self.player:collides(object) then
             object:onCollide()
-            if object.solid then
+            if self.player.liftingPot == false and object.solid then
                 if self.player.direction == 'left' then
                     self.player.x = self.player.x + PLAYER_WALK_SPEED * dt
                 elseif self.player.direction == 'right' then
