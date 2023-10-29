@@ -1,8 +1,9 @@
 PlayerPotWalkState = Class{__includes = PlayerWalkState}
 
-function PlayerPotWalkState:init(player, dungeon)
+function PlayerPotWalkState:init(player, dungeon, pot)
     self.entity = player
     self.dungeon = dungeon
+    self.pot = pot
     print('lift')
     -- render offset for spaced character sprite; negated in render function of state
     self.entity.offsetY = 5
@@ -14,18 +15,10 @@ function PlayerPotWalkState:update(dt)
     -- perform base collision detection against walls
     self.canSwingSword = false
     PlayerWalkState.update(self, dt)
-    for k, object in pairs(self.dungeon.currentRoom.objects) do
-        if object.type == 'pot' then
-            object.y = self.entity.y - self.entity.height / 2
-            object.x = self.entity.x
 
-            if self.entity.direction == 'left' or self.entity.direction == 'right' then
-                object.state = 'side'
-            else
-                object.state = 'top' 
-            end
-        end
-    end
+    -- pot tracks the location of the player
+    self.pot.y = self.entity.y - self.entity.height / 2
+    self.pot.x = self.entity.x
 
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'
@@ -40,7 +33,7 @@ function PlayerPotWalkState:update(dt)
         self.entity.direction = 'down'
         self.entity:changeAnimation('pot-walk-down')
     else
-        self.entity:changeState('pot-idle')
+        self.entity:changeState('pot-idle', self.pot)
     end
 
     if love.keyboard.wasPressed('space') then

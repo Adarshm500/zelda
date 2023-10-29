@@ -31,12 +31,12 @@ GAME_OBJECT_DEFS = {
         width = 16,
         height = 16,
         solid = true,
-        defaultState = 'top',
+        defaultState = 'ground',
         states = {
-            ['side'] = {
-                frame = 15
+            ['lifted'] = {
+                frame = 16
             },
-            ['top'] = {
+            ['ground'] = {
                 frame = 16
             },
         }

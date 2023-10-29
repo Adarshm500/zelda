@@ -43,10 +43,24 @@ function PlayerWalkState:update(dt)
 
     -- perform base collision detection against walls
     EntityWalkState.update(self, dt)
-    -- if collision with pot then player can lift it
-    if self.entity.potCollision then 
-        if love.keyboard.wasPressed('return') then
-            self.entity:changeState('pot-lift')
+
+    -- if we collide with a solid object then stop
+    for k, object in pairs(self.dungeon.currentRoom.objects) do
+        if self.entity:collides(object) and object.state == 'ground' then
+        -- trigger collision callback on object
+            -- if collision with pot then player can lift it
+            if love.keyboard.wasPressed('return') then
+                self.entity:changeState('pot-lift', object)
+            end
+            if self.entity.direction == 'left' then
+                self.entity.x = self.entity.x + PLAYER_WALK_SPEED * dt
+            elseif self.entity.direction == 'right' then
+                self.entity.x = self.entity.x - PLAYER_WALK_SPEED * dt
+            elseif self.entity.direction == 'up' then
+                self.entity.y = self.entity.y + PLAYER_WALK_SPEED * dt
+            elseif self.entity.direction == 'down' then
+                self.entity.y = self.entity.y - PLAYER_WALK_SPEED * dt
+            end
         end
     end
 

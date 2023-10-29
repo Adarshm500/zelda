@@ -29,8 +29,13 @@ function GameObject:init(def, x, y)
     self.width = def.width
     self.height = def.height
 
+    -- flag to check collision
+    self.isColliding = false
+
     -- default empty collision callback
-    self.onCollide = function() end
+    self.onCollide = function()
+        self.isColliding = true
+    end
 end
 
 function GameObject:update(dt)
