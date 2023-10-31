@@ -35,7 +35,6 @@ function PlayerPotIdleState:update(dt)
             dy = 2
         end
 
-        self.pot.state = 'ground'
         self.pot:fire(dx, dy)
         self.entity:changeState('idle')
     end 

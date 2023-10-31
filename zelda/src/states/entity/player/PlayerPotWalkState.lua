@@ -16,7 +16,7 @@ function PlayerPotWalkState:update(dt)
     PlayerWalkState.update(self, dt)
 
     -- pot tracks the location of the player
-    self.pot.y = self.entity.y - self.entity.height / 2
+    self.pot.y = self.entity.y - self.entity.height / 3
     self.pot.x = self.entity.x
 
     if love.keyboard.isDown('left') then
@@ -54,7 +54,6 @@ function PlayerPotWalkState:update(dt)
         end
 
         self.pot:fire(dx, dy)
-        self.pot.state = 'ground'
         self.entity:changeState('idle')
     end 
 end

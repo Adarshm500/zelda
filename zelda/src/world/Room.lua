@@ -279,7 +279,9 @@ function Room:render()
     end
 
     for k, object in pairs(self.objects) do
-        object:render(self.adjacentOffsetX, self.adjacentOffsetY)
+        if object.state ~= 'lifted' then
+            object:render(self.adjacentOffsetX, self.adjacentOffsetY)
+        end
     end
 
     for k, entity in pairs(self.entities) do
@@ -310,6 +312,12 @@ function Room:render()
     
     if self.player then
         self.player:render()
+    end
+
+    for k, object in pairs(self.objects) do
+        if object.state == 'lifted' then
+            object:render(self.adjacentOffsetX, self.adjacentOffsetY)
+        end
     end
 
     love.graphics.setStencilTest()
