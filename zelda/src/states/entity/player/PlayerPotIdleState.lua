@@ -22,7 +22,7 @@ function PlayerPotIdleState:update(dt)
     end
 
     if love.keyboard.wasPressed('return') then
-        -- throw the pot
+        -- throw the pot in the direction of the player
         local dx = 0
         local dy = 0
         if self.entity.direction == 'left' then

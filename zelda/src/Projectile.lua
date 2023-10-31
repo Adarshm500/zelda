@@ -27,17 +27,11 @@ function Projectile:update(dt)
 
     -- if the object collides with the wall it shatters and is removed
     local function wallCollision()
-        if self.object.type == 'pot' then
-            self.object.state = 'broken'
-        end
-        -- stop the object
-        self.object.projectile.dx = 0
-        self.object.projectile.dy = 0
-
         -- remove the object
         self.object.remove = true
     end
 
+    -- wall bound constants
     local leftBound = MAP_RENDER_OFFSET_X + TILE_SIZE
     local rightBound = VIRTUAL_WIDTH - TILE_SIZE * 2
     local topEdge = MAP_RENDER_OFFSET_Y + TILE_SIZE - self.object.height / 2
@@ -45,6 +39,7 @@ function Projectile:update(dt)
 
     local isProjectileMoving = self.object.projectile.dx ~= 0 or self.object.projectile.dy ~= 0
     
+    -- if the projectile is beyond bounds then collide
     if isProjectileMoving then
         local isOutsideXBounds = (self.object.projectile.dx < 0 and self.object.x <= leftBound) or
                                  (self.object.projectile.dx > 0 and self.object.x + self.object.width >= rightBound)
@@ -63,8 +58,6 @@ function Projectile:update(dt)
     
     -- remove the pot after four tiles
     if self.distanceTravelledX >= 4 * TILE_SIZE or self.distanceTravelledY >= 4 * TILE_SIZE then
-        self.dx = 0
-        self.dy = 0
         self.object.remove = true
     else
         -- update the location of object

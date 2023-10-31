@@ -4,14 +4,13 @@ function PlayerPotWalkState:init(player, dungeon, pot)
     self.entity = player
     self.dungeon = dungeon
     self.pot = pot
-    -- print('lift')
+
     -- render offset for spaced character sprite; negated in render function of state
     self.entity.offsetY = 5
     self.entity.offsetX = 0
 end
 
 function PlayerPotWalkState:update(dt)
-    -- print('potwalking')
     -- perform base collision detection against walls
     self.canSwingSword = false
     PlayerWalkState.update(self, dt)
@@ -41,7 +40,7 @@ function PlayerPotWalkState:update(dt)
     end
 
     if love.keyboard.wasPressed('return') then
-        -- throw the pot
+        -- throw the pot in the direction of the player
         local dx = 0
         local dy = 0
         if self.entity.direction == 'left' then
@@ -54,8 +53,8 @@ function PlayerPotWalkState:update(dt)
             dy = 2
         end
 
-        self.pot.state = 'ground'
         self.pot:fire(dx, dy)
+        self.pot.state = 'ground'
         self.entity:changeState('idle')
     end 
 end
