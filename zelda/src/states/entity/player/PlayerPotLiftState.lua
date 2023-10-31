@@ -5,25 +5,32 @@ function PlayerPotLiftState:init(player, dungeon, pot)
     self.dungeon = dungeon
     self.pot = pot
 
-    -- render offset for spaced character sprite
-    self.player.offsetY = 5
-    self.player.offsetX = 8
-
     self.player:changeAnimation('pot-lift-' .. self.player.direction)
 end
 
 function PlayerPotLiftState:update(dt)
     if self.player.currentAnimation.timesPlayed > 0 then
+        -- change the state
         self.player.currentAnimation.timesPlayed = 0
         self.player:changeState('pot-idle',self.pot)
     end
-
-    -- change the position of the pot accordint to the player
-    self.pot.y = self.player.y - self.player.height / 3
-    self.pot.x = self.player.x
+    -- change the position of the pot accordint to the player direction
+    if self.player.direction == 'left' then
+        self.pot.y = self.player.y
+        self.pot.x = self.player.x - self.player.width / 4
+    elseif self.player.direction == 'right' then
+        self.pot.y = self.player.y
+        self.pot.x = self.player.x + self.player.width / 4
+    elseif self.player.direction == 'up' then
+        self.pot.y = self.player.y - self.player.height / 2 
+        self.pot.x = self.player.x 
+    elseif self.player.direction == 'down' then
+        self.pot.y = self.player.y
+        self.pot.x = self.player.x 
+    end
+    self.pot.state = 'lifted'
 
     -- set the self.pot state to lifted
-    self.pot.state = 'lifted'
 end
 
 function PlayerPotLiftState:render()

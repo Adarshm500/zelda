@@ -4,14 +4,16 @@ function PlayerPotIdleState:init(entity, dungeon, pot)
     self.entity = entity
     self.dungeon = dungeon
     self.pot = pot
+    self.entity.canSwingSword = false
 
     self.entity:changeAnimation('pot-idle-' .. self.entity.direction)
-    -- render offset for spaced character sprite (negated in render function of state)
-    self.entity.offsetY = 5
-    self.entity.offsetX = 0
 end
 
 function PlayerPotIdleState:update(dt)
+    -- change the position of the pot accordint to the player
+    self.pot.y = self.entity.y - self.entity.height / 3
+    self.pot.x = self.entity.x
+    
     if love.keyboard.isDown('left') or love.keyboard.isDown('right') or
         love.keyboard.isDown('up') or love.keyboard.isDown('down') then
         self.entity:changeState('pot-walk', self.pot)
@@ -35,6 +37,7 @@ function PlayerPotIdleState:update(dt)
             dy = 2
         end
 
+        gSounds['projectile']:play()
         self.pot:fire(dx, dy)
         self.entity:changeState('idle')
     end 

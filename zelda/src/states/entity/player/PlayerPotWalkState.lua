@@ -4,6 +4,8 @@ function PlayerPotWalkState:init(player, dungeon, pot)
     self.entity = player
     self.dungeon = dungeon
     self.pot = pot
+    self.entity.canSwingSword = false
+    self.entity.canChangeRoom = false
 
     -- render offset for spaced character sprite; negated in render function of state
     self.entity.offsetY = 5
@@ -12,8 +14,13 @@ end
 
 function PlayerPotWalkState:update(dt)
     -- perform base collision detection against walls
-    self.canSwingSword = false
     PlayerWalkState.update(self, dt)
+
+    for k, doorway in pairs(self.dungeon.currentRoom.doorways) do
+        if self.entity:collides(doorway) then
+            gSounds['invalid-move']:play()
+        end
+    end
 
     -- pot tracks the location of the player
     self.pot.y = self.entity.y - self.entity.height / 3
@@ -53,6 +60,7 @@ function PlayerPotWalkState:update(dt)
             dy = 2
         end
 
+        gSounds['projectile']:play()
         self.pot:fire(dx, dy)
         self.entity:changeState('idle')
     end 

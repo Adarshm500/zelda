@@ -15,6 +15,9 @@ function Player:init(def)
 
     -- flag to check if the player is lfiting the pot
     self.liftingPot = false
+
+    self.canSwingSword = true
+    self.canChangeRoom = true
 end
 
 function Player:update(dt)

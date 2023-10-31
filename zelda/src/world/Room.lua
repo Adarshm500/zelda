@@ -176,7 +176,7 @@ function Room:update(dt)
         if entity.health <= 0 then
             entity.dead = true
             -- chance to generate a heart
-            if math.random(4) == 1 and entity.prevHealth > 0 then
+            if math.random(3) == 1 and entity.prevHealth > 0 then
                 local heart = GameObject(GAME_OBJECT_DEFS['heart'],entity.x, entity.y)
 
                 -- onCollide the heart should disappear and the health should increase
@@ -234,7 +234,7 @@ function Room:update(dt)
         -- add shatter effect to the pot
         if (object.remove) or (object.removing) then
             -- include a shatter effect before disappearance for pot
-            if object.type == 'pot' then     
+            if object.type == 'pot' then
                 object.remove = false
                 object.removing = true
                 -- wait for some time before setting the object to remove
@@ -245,6 +245,7 @@ function Room:update(dt)
                 object.projectile.dx = 0
                 object.projectile.dy = 0
                 if self.delayTimer > 1 then
+                    gSounds['pot-hit']:play()
                     self.delayTimer = 0
                     -- removingPot = false
                     object.removing = false
