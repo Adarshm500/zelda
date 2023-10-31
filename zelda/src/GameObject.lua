@@ -33,16 +33,28 @@ function GameObject:init(def, x, y)
     self.isColliding = false
 
     -- default empty collision callback
-    self.onCollide = function()
-        self.isColliding = true
-    end
+    self.onCollide = function() end
+
+    self.projectile = nil
+    self.remove = false
+    self.removing = false -- flag to check if the process of object removal going on (to add some functionality like shatter effect)
+end
+
+function GameObject:fire(dx, dy)
+    self.projectile = Projectile(self, dx, dy)
 end
 
 function GameObject:update(dt)
-
+    if self.projectile then
+        self.projectile:update(dt)
+    end
 end
 
 function GameObject:render(adjacentOffsetX, adjacentOffsetY)
+    if self.projectile then
+        self.projectile:render(adjacentOffsetX, adjacentOffsetY)
+    end
+
     love.graphics.draw(gTextures[self.texture], gFrames[self.texture][self.states[self.state].frame or self.frame],
         self.x + adjacentOffsetX, self.y + adjacentOffsetY)
 end

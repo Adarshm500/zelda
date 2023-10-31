@@ -31,6 +31,7 @@ GAME_OBJECT_DEFS = {
         width = 16,
         height = 16,
         solid = true,
+        projectile = true,
         defaultState = 'ground',
         states = {
             ['lifted'] = {
@@ -39,6 +40,9 @@ GAME_OBJECT_DEFS = {
             ['ground'] = {
                 frame = 16
             },
+            ['broken'] = {
+                frame = 54
+            }
         }
     },
     ['heart'] = {

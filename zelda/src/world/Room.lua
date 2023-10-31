@@ -40,6 +40,9 @@ function Room:init(player)
     -- used for drawing when this room is the next room, adjacent to the active
     self.adjacentOffsetX = 0
     self.adjacentOffsetY = 0
+
+    -- wait for a bit before removing the pot(to add the shatter effect)
+    self.delayTimer = 0
 end
 
 --[[
@@ -160,15 +163,7 @@ function Room:generateWallsAndFloors()
     end
 end
 
-function Room:update(dt)
-    
-    -- if love.keyboard.isDown('a') then
-    --     for k, object in pairs(self.objects) do
-    --         if object.type == 'pot' then
-    --             object.x = object.x - self.player.walkSpeed * dt
-    --         end
-    --     end
-    -- end 
+function Room:update(dt)    
     -- don't update anything if we are sliding to another room (we have offsets)
     if self.adjacentOffsetX ~= 0 or self.adjacentOffsetY ~= 0 then return end
 
@@ -188,7 +183,7 @@ function Room:update(dt)
                 heart.onCollide = function(obj)
                     for i = 1, #self.objects do
                         if self.objects[i] == obj then
-                            table.remove(self.objects, i)
+                            obj.remove = true
                         end
                     end
                     
@@ -217,16 +212,54 @@ function Room:update(dt)
             end
         end
         entity.prevHealth = entity.health
+
+        -- if object is projectile and collides with entity then entity should get damage of 1 position
+        for k, object in pairs(self.objects) do
+            if object.projectile and entity:collides(object) then
+                entity:damage(1)
+                object.remove = true
+            end
+        end
     end
 
-    -- self.player.potCollision = false
-    -- for k, object in pairs(self.objects) do
-    --     object:update(dt)
+    local newObjects = {}
 
-    --     if self.player:collides(object) and object.type == 'pot' then
-    --         self.player.potCollision = true
-    --     end
-    -- end
+    for k, object in pairs(self.objects) do
+        object:update(dt)
+        -- trigger collision callback on object
+        if self.player:collides(object) then
+            object:onCollide()
+        end
+
+        -- add shatter effect to the pot
+        if (object.remove) or (object.removing) then
+            -- include a shatter effect before disappearance for pot
+            if object.type == 'pot' then     
+                object.remove = false
+                object.removing = true
+                -- wait for some time before setting the object to remove
+                self.delayTimer = self.delayTimer + dt
+                if object.type == 'pot' then
+                    object.state = 'broken'
+                end
+                object.projectile.dx = 0
+                object.projectile.dy = 0
+                if self.delayTimer > 1 then
+                    self.delayTimer = 0
+                    -- removingPot = false
+                    object.removing = false
+                    object.remove = true
+                end
+            end
+        end
+
+        -- remove the flagged objects
+        if not object.remove then
+            table.insert(newObjects, object)
+        end
+    end
+
+    self.objects = newObjects
 end
 
 function Room:render()

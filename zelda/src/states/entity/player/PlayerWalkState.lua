@@ -9,7 +9,6 @@
 PlayerWalkState = Class{__includes = EntityWalkState}
 
 function PlayerWalkState:init(player, dungeon)
-    print('walk')
     self.entity = player
     self.dungeon = dungeon
     self.canSwingSword = true
@@ -20,7 +19,6 @@ function PlayerWalkState:init(player, dungeon)
 end
 
 function PlayerWalkState:update(dt)
-    print('walking')
     if love.keyboard.isDown('left') then
         self.entity.direction = 'left'
         self.entity:changeAnimation('walk-left')
@@ -44,13 +42,14 @@ function PlayerWalkState:update(dt)
     -- perform base collision detection against walls
     EntityWalkState.update(self, dt)
 
-    -- if we collide with a solid object then stop
     for k, object in pairs(self.dungeon.currentRoom.objects) do
-        if self.entity:collides(object) and object.state == 'ground' then
-        -- trigger collision callback on object
+        -- if we collide with a solid object then stop
+        if self.entity:collides(object) and object.solid then
             -- if collision with pot then player can lift it
-            if love.keyboard.wasPressed('return') then
-                self.entity:changeState('pot-lift', object)
+            if object.type == 'pot' and object.state == 'ground' then
+                if love.keyboard.wasPressed('return') then
+                    self.entity:changeState('pot-lift', object)
+                end
             end
             if self.entity.direction == 'left' then
                 self.entity.x = self.entity.x + PLAYER_WALK_SPEED * dt
