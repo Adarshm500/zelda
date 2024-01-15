@@ -14,9 +14,6 @@ This is an implementation of legend of zelda game. The game is part of CS50 Game
 - Hearts occasionally drop from vanquished enemies at random. When picked up by the player, they will heal the player for a full heart.
 - Each individual heart is worth 2 points of damage. Incrementing health by 2 is done carefully to avoid exceeding the visual cap of 6.
 
-- Define a GameObject with an onConsume callback
-- Refer to Super Mario Bros. for insights on the implementation.
-
 #### Pots
 - Pots have been added to the game world at random. The player can pick up pots, and their animation will change to reflect them carrying the pot.
 - The player cannot swing their sword while carrying a pot. To lift a pot, the player can press a designated key (e.g., enter or return) when in front of it.
