@@ -1,20 +1,21 @@
 # Legend of Zelda
-### Video Demo:  [Watch Demo](https://youtu.be/IPBM3ryj330?si=wTb3mXdjfzXYWv9M)
-### Description:
+## Video Demo:  [Watch Demo](https://youtu.be/IPBM3ryj330?si=wTb3mXdjfzXYWv9M)
+## Description:
 This is an implementation of legend of zelda game. The game is part of CS50 Game Development and I have added the specified features in the Problem Set.
 
-### Table of Contents
+## Table of Contents
 
 - [Hearts](#hearts)
 - [Pots](#pots)
   - [Carrying Pots](#carrying-pots)
   - [Throwing Pots](#throwing-pots)
-### Features Added:
+## Features Added:
 #### Hearts
 - Hearts occasionally drop from vanquished enemies at random. When picked up by the player, they will heal the player for a full heart.
 - Each individual heart is worth 2 points of damage. Incrementing health by 2 is done carefully to avoid exceeding the visual cap of 6.
 
-#### Pots
+### Pots
+#### Carrying Pots
 - Pots have been added to the game world at random. The player can pick up pots, and their animation will change to reflect them carrying the pot.
 - The player cannot swing their sword while carrying a pot. To lift a pot, the player can press a designated key (e.g., enter or return) when in front of it.
 - New states for the player have been added, and a link has been established between the pot and the player to ensure the pot tracks the player's position.
